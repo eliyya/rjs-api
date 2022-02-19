@@ -24,9 +24,9 @@ You can explore all api routes as a property and use the `get()` method on any e
 
 ***
 
-### get(getOptions): Promise<object>
+### get(getOptions): Promise\<object>
 
-Apply a `GET to the generated route
+Apply a `GET` to the generated route
 
 **Params:**
 * **getOptions:** Object
