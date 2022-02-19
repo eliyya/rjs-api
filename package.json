@@ -1,0 +1,29 @@
+{
+  "name": "rjs-api",
+  "version": "0.1.0",
+  "description": "Simple api for revolt in js",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eliyya/rjs-api.git"
+  },
+  "keywords": [
+    "revolt",
+    "revolt-js",
+    "javascript",
+    "api",
+    "lite",
+    "simple",
+    "revolt-bot"
+  ],
+  "author": "eliyya",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/eliyya/rjs-api/issues"
+  },
+  "homepage": "https://github.com/eliyya/rjs-api#readme"
+}
