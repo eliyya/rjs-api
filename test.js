@@ -1,5 +1,11 @@
 import Api from "./index.js";
 
-const api = Api('jC6T2X2wYs70W82wnT73hN-hc12sB8R_q0ngKFaGb9RyL3SdIbKDMasZNare_y3p')
+const api = Api(process.env.TOKEN)
 
-api.channel.get().catch(console.log)
+api.channels['01FSMFSXJBYAAYSVCW9JGXXCJ0'].messages.post({
+    body: JSON.stringify({
+        content: 'hi?'
+    })
+}).then(console.log).catch(console.log)
+
+console.log(api.channel['01FSMFSXJBYAAYSVCW9JGXXCJ0'].messages.post)
