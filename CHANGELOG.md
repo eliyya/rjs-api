@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+# v0.3.0
+## Features
+- **patch:** Added the `patch()` method
 # v0.2.0
 ## Features
 - **post:** Added the `post()` method

@@ -11,7 +11,7 @@ function createProxy(url, token) {
         {},
         {
             get: (_, prop) => {
-                if (!["get", "post"].includes(prop)) return createProxy(`${url}/${prop}`, token);
+                if (!["get", "post", "patch"].includes(prop)) return createProxy(`${url}/${prop}`, token);
                 if (prop === "get")
                     return async ({ query = "", headers = {} } = {}) => {
                         if (query && typeof query === "object") query = `?${new URLSearchParams(query)}`;
@@ -29,7 +29,7 @@ function createProxy(url, token) {
                         });
                     };
                 if (prop === "post")
-                    return async ({ query = "", headers = {}, body = '' } = {}) => {
+                    return async ({ query = "", headers = {}, body = "" } = {}) => {
                         if (query && typeof query === "object") query = `?${new URLSearchParams(query)}`;
                         try {
                             if (body && typeof body === "object") body = JSON.stringify(body);
@@ -47,6 +47,34 @@ function createProxy(url, token) {
                             ...headers,
                             body,
                             method: "POST",
+                        });
+                        if (req.ok) return req.json();
+                        return Promise.reject({
+                            status: req.status,
+                            statusText: req.statusText,
+                            url: req.url,
+                            method: "POST",
+                        });
+                    };
+                if (prop === "patch")
+                    return async ({ query = "", headers = {}, body = "" } = {}) => {
+                        if (query && typeof query === "object") query = `?${new URLSearchParams(query)}`;
+                        try {
+                            if (body && typeof body === "object") body = JSON.stringify(body);
+                        } catch (error) {
+                            return Promise.reject({
+                                status: 500,
+                                statusText: String(error),
+                                url: url,
+                                method: "POST",
+                            });
+                        }
+                        if (query && !query.startsWith("?")) query = "?" + query;
+                        const req = await fetch(url + query, {
+                            headers: { "x-bot-token": token, "content-type": "aplication/json" },
+                            ...headers,
+                            body,
+                            method: "PATCH",
                         });
                         if (req.ok) return req.json();
                         return Promise.reject({
