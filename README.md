@@ -11,22 +11,35 @@ Is a simple api for revolt bots in JavaScript
 ## Example
 
 ```js
-// Import the API
-import Api from "rjs-api"
+// Import the API and WebSocket
+import { Api, WebSocket } from "rjs-api"
+
 //Create Api object
 const api = Api("TOKEN_BOT")
+
 //GET method
-api.users["@me"].get().then(console.log).catch(console.log)
+const userbot = await api.users["@me"].get()
 //POST method
 api.channels["01FSMFSXJBYAAYSVCW9JGXXCJ0"].messages
-    .post({ body: { content: "hi" } })
-    .then(console.log)
-    .catch(console.log)
+    .post({ body: { content: "Hi, Im "+userbot.username } })
+
+//create a WebSocket connection
+const ws = WebSocket("TOKEN_BOT")
+
+//Listening events
+ws.on('message', (data) => {
+    const event = JSON.parse(data.toString())
+    if (event.type !== 'Message') return
+    if (event.content.startsWith('!ping'))
+        return api.channels[event.channel].messages.post({
+            body: JSON.stringify({
+                content: 'pong!'
+            })
+    })
+})
 ```
 
-You can explore all api routes as a property and use the `get()` or `post()` method on any endpoint
-
----
+Connect to WebSocket and recive events in real time, You can explore all api routes as a property and use the `get()`, `post()`, `put()` or `patch()` method on any endpoint
 
 ### get(getOptions): Promise\<object>
 

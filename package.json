@@ -1,6 +1,6 @@
 {
   "name": "rjs-api",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Simple api for revolt in js",
   "main": "index.js",
   "type": "module",
@@ -28,5 +28,8 @@
   "homepage": "https://github.com/eliyya/rjs-api#readme",
   "engines": {
     "node": "^17.5.0"
+  },
+  "dependencies": {
+    "ws": "^8.5.0"
   }
 }

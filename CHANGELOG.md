@@ -1,5 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+# v0.5.0
+## Features
+- **websocket:** Added the `WebSocketConnection` export
+# v0.4.0
+## Features
+- **put:** Added the `put()` method
+## Fix
+- **error:** method propierty fixed in error info
 # v0.3.0
 ## Features
 - **patch:** Added the `patch()` method

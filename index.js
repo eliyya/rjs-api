@@ -1,3 +1,5 @@
+import WebSocket from "ws"
+
 /**
  * Create new Revolt Apifor Bots
  * @param {string} token - Bot Token
@@ -115,6 +117,23 @@ function createProxy(url, token) {
             }
         }
     )
+}
+
+/**
+ * Create a new WebSocket connection to the Revolt Api
+ * @param {string} token - Bot Token
+ * @returns {WebSocket} - the WebSocket connection ready to use
+ */
+export function WebSocketConnection(token) {
+    const ws = new WebSocket('wss://ws.revolt.chat?format=json')
+    ws.on('open', () => {
+        setInterval(() => ws.ping(), 15_000)
+        ws.send(JSON.stringify({
+            type: 'Authenticate',
+            token: token
+        }))
+    })
+    return ws
 }
 
 export default Api
