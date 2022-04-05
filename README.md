@@ -58,7 +58,19 @@ Apply a `PATCH` to the generated route
 **Params:**
 
 -   **patchOptions:** Object
-    -   **body:** `Object` or `String` - Data to send in the post
+    -   **body:** `Object` or `String` - Data to send in the patch
+    -   **query:** `Object` or `String` - Properties passed in the object are added in the query.
+    -   **headers:** Object - Extra headers can be added and override the default ones.
+-   **Returns:** A `Promise` with the information in a `JSON` received from the API. In case of an error receives an `Object` with error information.
+
+### put(putOptions): Promise\<object>
+
+Apply a `PUT` to the generated route
+
+**Params:**
+
+-   **putOptions:** Object
+    -   **body:** `Object` or `String` - Data to send in the put
     -   **query:** `Object` or `String` - Properties passed in the object are added in the query.
     -   **headers:** Object - Extra headers can be added and override the default ones.
 -   **Returns:** A `Promise` with the information in a `JSON` received from the API. In case of an error receives an `Object` with error information.
