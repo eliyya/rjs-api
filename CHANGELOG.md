@@ -1,5 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+# v0.6.0
+## Features
+- **delete:** Added the `delete()` method
+- **types:** Added the `.d.ts` file
+## Fix
+- **headers:** headers are added correctly
 # v0.5.0
 ## Features
 - **websocket:** Added the `WebSocketConnection` export

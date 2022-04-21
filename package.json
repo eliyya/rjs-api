@@ -1,6 +1,6 @@
 {
   "name": "rjs-api",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Simple api for revolt in js",
   "main": "index.js",
   "type": "module",
@@ -31,5 +31,9 @@
   },
   "dependencies": {
     "ws": "^8.5.0"
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "semi": false
   }
 }
