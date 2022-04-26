@@ -12,31 +12,37 @@ Is a simple api for revolt bots in JavaScript
 
 ```js
 // Import the API and WebSocket
-import { Api, WebSocket } from "rjs-api"
+import { Api, WebSocket } from 'rjs-api'
 
 //Create Api object
-const api = Api("TOKEN_BOT")
+const api = Api('TOKEN_BOT')
 
 //GET method
-const userbot = await api.users["@me"].get()
+const userbot = await api.users['@me'].get()
 
 //POST method
-api.channels["01FSMFSXJBYAAYSVCW9JGXXCJ0"].messages
-    .post({ body: { content: "Hi, Im "+userbot.username } })
+api.channels['01FSMFSXJBYAAYSVCW9JGXXCJ0'].messages.post({
+    body: { 
+        content: 'Hi, Im ' + userbot.username + ', Im ready'
+     }
+})
 
 //create a WebSocket connection
-const ws = WebSocket("TOKEN_BOT")
+const ws = WebSocket('TOKEN_BOT')
 
 //Listening events
 ws.on('message', (data) => {
     const event = JSON.parse(data.toString())
+
     if (event.type !== 'Message') return
+
     if (event.content.startsWith('!ping'))
+    
         return api.channels[event.channel].messages.post({
             body: JSON.stringify({
                 content: 'pong!'
             })
-    })
+        })
 })
 ```
 

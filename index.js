@@ -1,189 +1,105 @@
 import WebSocket from "ws"
 
+function proccesQuery(query = '') {
+    if (query && typeof query === 'object') return `?${new URLSearchParams(query)}`
+    if (query && typeof query === 'string' && !query.startsWith('?')) return `?${query}`
+    if (query && typeof query === 'string') return query
+    return ''
+}
+
 /**
- * Create new Revolt Apifor Bots
- * @param {string} token - Bot Token
- * @returns Api
+ * Create new Revolt Api for Bots
  */
 export function Api(token) {
-    return createProxy("https://api.revolt.chat", token)
+    return createProxy('https://api.revolt.chat', token)
 }
+
 function createProxy(url, token) {
+    const defaultHeaders = {
+        'x-bot-token': token,
+        'content-type': 'application/json'
+    }
     return new Proxy(
-        {},
         {
-            get: (_, prop) => {
+            /**
+             * Apply a GET to this route
+             * @param {{query?:string;headers?:object}} getOptions 
+             * @returns {Psomise<any>}
+             */
+            async get({ query = "", headers = {} } = {}){
+                const res = await fetch(`${url}${proccesQuery(query)}`, {
+                    headers: { ...defaultHeaders, ...headers }
+                })
+                if (res.ok) return res.json()
+                else Promise.reject(new Error(res.statusText))
+            },
+
+            /**
+             * Apply a POST to this route
+             * @param {{query?:string;headers?:object;body?:string|object}} getOptions 
+             * @returns {Psomise<any>}
+             */
+            async post({ query = "", headers = {}, body = "" } = {}){
+                const res = await fetch(`${url}${proccesQuery(query)}`, {
+                    headers: { ...defaultHeaders, ...headers },
+                    method: 'POST',
+                    body: typeof body !== 'string' ? JSON.stringify(body) : body
+                })
+                if (res.ok) return res.json()
+                else Promise.reject(new Error(`Error ${res.status}: ${res.statusText}`))
+            },
+
+            /**
+             * Apply a PATCH to this route
+             * @param {{query?:string;headers?:object;body?:string|object}} getOptions 
+             * @returns {Psomise<any>}
+             */
+            async patch({ query = "", headers = {}, body = "" } = {}){
+                const res = await fetch(`${url}${proccesQuery(query)}`, {
+                    headers: { ...defaultHeaders, ...headers },
+                    method: 'PATCH',
+                    body: typeof body !== 'string' ? JSON.stringify(body) : body
+                })
+                if (res.ok) return res.json()
+                else Promise.reject(new Error(`Error ${res.status}: ${res.statusText}`))
+            },
+
+            /**
+             * Apply a PUT to this route
+             * @param {{query?:string;headers?:object;body?:string|object}} getOptions 
+             * @returns {Psomise<any>}
+             */
+            async put({ query = "", headers = {}, body = "" } = {}){
+                const res = await fetch(`${url}${proccesQuery(query)}`, {
+                    headers: { ...defaultHeaders, ...headers },
+                    method: 'PUT',
+                    body: typeof body !== 'string' ? JSON.stringify(body) : body
+                })
+                if (res.ok) return res.json()
+                else Promise.reject(new Error(`Error ${res.status}: ${res.statusText}`))
+            },
+
+            /**
+             * Apply a DELETE to this route
+             * @param {{query?:string;headers?:object;body?:string|object}} getOptions 
+             * @returns {Psomise<any>}
+             */
+            async delete({ query = "", headers = {}, body = "" } = {}){
+                const res = await fetch(`${url}${proccesQuery(query)}`, {
+                    headers: { ...defaultHeaders, ...headers },
+                    method: 'DELETE',
+                    body: typeof body !== 'string' ? JSON.stringify(body) : body
+                })
+                if (res.ok) return res.json()
+                else Promise.reject(new Error(`Error ${res.status}: ${res.statusText}`))
+            }
+        },
+        {
+            get: (obj, prop) => {
                 if (!["get", "post", "patch", "put", "delete"].includes(prop))
                     return createProxy(`${url}/${prop}`, token)
-                if (prop === "get")
-                    return async ({ query = "", headers = {} } = {}) => {
-                        if (query && typeof query === "object")
-                            query = `?${new URLSearchParams(query)}`
-                        if (query && !query.startsWith("?")) query = "?" + query
-                        const req = await fetch(url + query, {
-                            headers: {
-                                "x-bot-token": token,
-                                "content-type": "aplication/json",
-                                ...headers,
-                            },
-                        })
-                        if (req.ok) return req.json()
-                        return Promise.reject({
-                            status: req.status,
-                            statusText: req.statusText,
-                            url: req.url,
-                            method: "GET",
-                        })
-                    }
-                if (prop === "post")
-                    return async ({
-                        query = "",
-                        headers = {},
-                        body = "",
-                    } = {}) => {
-                        if (query && typeof query === "object")
-                            query = `?${new URLSearchParams(query)}`
-                        try {
-                            if (body && typeof body === "object")
-                                body = JSON.stringify(body)
-                        } catch (error) {
-                            return Promise.reject({
-                                status: 500,
-                                statusText: String(error),
-                                url: url,
-                                method: "POST",
-                            })
-                        }
-                        if (query && !query.startsWith("?")) query = "?" + query
-                        const req = await fetch(url + query, {
-                            headers: {
-                                "x-bot-token": token,
-                                "content-type": "aplication/json",
-                                ...headers,
-                            },
-                            body,
-                            method: "POST",
-                        })
-                        if (req.ok) return req.json()
-                        return Promise.reject({
-                            status: req.status,
-                            statusText: req.statusText,
-                            url: req.url,
-                            method: "POST",
-                        })
-                    }
-                if (prop === "patch")
-                    return async ({
-                        query = "",
-                        headers = {},
-                        body = "",
-                    } = {}) => {
-                        if (query && typeof query === "object")
-                            query = `?${new URLSearchParams(query)}`
-                        try {
-                            if (body && typeof body === "object")
-                                body = JSON.stringify(body)
-                        } catch (error) {
-                            return Promise.reject({
-                                status: 500,
-                                statusText: String(error),
-                                url: url,
-                                method: "PATCH",
-                            })
-                        }
-                        if (query && !query.startsWith("?")) query = "?" + query
-                        const req = await fetch(url + query, {
-                            headers: {
-                                "x-bot-token": token,
-                                "content-type": "aplication/json",
-                                ...headers,
-                            },
-                            body,
-                            method: "PATCH",
-                        })
-                        if (req.ok) return req.json()
-                        return Promise.reject({
-                            status: req.status,
-                            statusText: req.statusText,
-                            url: req.url,
-                            method: "PATCH",
-                        })
-                    }
-                if (prop === "put")
-                    return async ({
-                        query = "",
-                        headers = {},
-                        body = "",
-                    } = {}) => {
-                        if (query && typeof query === "object")
-                            query = `?${new URLSearchParams(query)}`
-                        try {
-                            if (body && typeof body === "object")
-                                body = JSON.stringify(body)
-                        } catch (error) {
-                            return Promise.reject({
-                                status: 500,
-                                statusText: String(error),
-                                url: url,
-                                method: "PUT",
-                            })
-                        }
-                        if (query && !query.startsWith("?")) query = "?" + query
-                        const req = await fetch(url + query, {
-                            headers: {
-                                "x-bot-token": token,
-                                "content-type": "aplication/json",
-                                ...headers,
-                            },
-                            body,
-                            method: "PUT",
-                        })
-                        if (req.ok) return req.json()
-                        return Promise.reject({
-                            status: req.status,
-                            statusText: req.statusText,
-                            url: req.url,
-                            method: "PUT",
-                        })
-                    }
-                if (prop === "delete")
-                    return async ({
-                        query = "",
-                        headers = {},
-                        body = "",
-                    } = {}) => {
-                        if (query && typeof query === "object")
-                            query = `?${new URLSearchParams(query)}`
-                        try {
-                            if (body && typeof body === "object")
-                                body = JSON.stringify(body)
-                        } catch (error) {
-                            return Promise.reject({
-                                status: 500,
-                                statusText: String(error),
-                                url: url,
-                                method: "DELETE",
-                            })
-                        }
-                        if (query && !query.startsWith("?")) query = "?" + query
-                        const req = await fetch(url + query, {
-                            headers: {
-                                "x-bot-token": token,
-                                "content-type": "aplication/json",
-                                ...headers,
-                            },
-                            body,
-                            method: "DELETE",
-                        })
-                        if (req.ok) return req.json()
-                        return Promise.reject({
-                            status: req.status,
-                            statusText: req.statusText,
-                            url: req.url,
-                            method: "DELETE",
-                        })
-                    }
-            },
+                else return obj[prop]
+            }
         }
     )
 }
