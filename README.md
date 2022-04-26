@@ -101,7 +101,7 @@ Apply a `PUT` to the generated route
 
 ### delete(deleteOptions?): Promise\<object>
 
-Apply a `PUT` to the generated route
+Apply a `DELETE` to the generated route
 
 **Params:**
 
