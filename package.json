@@ -1,6 +1,6 @@
 {
   "name": "rjs-api",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Simple api for revolt in js",
   "main": "index.js",
   "type": "module",

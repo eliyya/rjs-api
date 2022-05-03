@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+# v0.9.0
+## Features
+- **types:** Add API type
 # v0.7.0
 ## Features
 - **error:** If an error occurs it now returns an `Error` object
